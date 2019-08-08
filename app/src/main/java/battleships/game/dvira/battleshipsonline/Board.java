@@ -1,12 +1,13 @@
 package battleships.game.dvira.battleshipsonline;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by dvira on 07-Aug-19.
  */
 
-public class Board {
+public class Board implements Serializable{
     private int[][] board;
     private Ship[] ships;
     public Board(){
@@ -41,6 +42,14 @@ public class Board {
 
     public Ship[] getShips(){
         return ships;
+    }
+
+    public String toString(){
+        String str = "";
+        for (int i = 0; i < ships.length; i++){
+            str += "Ship at" + ships[i].locations[0][0] + ", " + ships[i].locations[0][1] + "\n";
+        }
+        return str;
     }
 
 }

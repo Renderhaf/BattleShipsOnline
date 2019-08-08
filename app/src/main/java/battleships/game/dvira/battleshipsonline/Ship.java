@@ -1,10 +1,12 @@
 package battleships.game.dvira.battleshipsonline;
 
+import java.io.Serializable;
+
 /**
  * Created by dvira on 08-Aug-19.
  */
 
-public class Ship {
+public class Ship implements Serializable{
     int[][] locations;
     int loc = 0;
     public Ship(int len){

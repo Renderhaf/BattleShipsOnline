@@ -1,7 +1,9 @@
 package battleships.game.dvira.battleshipsonline;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,13 +16,13 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
 
     ImageButton[][] places;
     Button homebutton;
-    Button undobutton;
     Button setbtn;
     int dir;
     int len;
     int[] selected;
     Board board;
     int shipnum;
+    int endships;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
         shipnum = 0;
         dir = 0;
         len = 3;
+        endships = 1;
         selected = new int[2];
         board = new Board();
 
@@ -73,6 +76,9 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             }
         }
         if (v.getId() == setbtn.getId()){
+            if (selected[0] == -1 && selected[1] == -1){
+                return;
+            }
             addNew();
             selected[0] = -1;
             selected[1] = -1;
@@ -80,6 +86,22 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             drawboard();
             shipnum ++;
 
+            if (shipnum == endships){
+                AlertDialog alertDialog = new AlertDialog.Builder(MakeBoard.this).create();
+                alertDialog.setTitle("Starting Game...");
+                alertDialog.setMessage("You have set your board up with " + shipnum + " ships, starting game...");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Player p = new Player(board);
+                                Intent i = new Intent(MakeBoard.this, CompGame.class);
+                                i.putExtra("player", p);
+                                startActivity(i);
+                            }
+                        });
+                alertDialog.show();
+            }
             switch (shipnum){
                 case 1:
                     len = 5;
@@ -95,7 +117,6 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
                     break;
                 case 5:
                     len = 0; // need to add dialog box;
-                    Toast.makeText(this, board.getShips().length+"", Toast.LENGTH_SHORT).show();
                     break;
             }
 

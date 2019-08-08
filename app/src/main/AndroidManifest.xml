@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Menu" />
-        <activity android:name=".MakeBoard"></activity>
+        <activity android:name=".MakeBoard" />
+        <activity android:name=".CompGame"></activity>
     </application>
 
 </manifest>
