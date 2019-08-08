@@ -8,8 +8,10 @@ import java.util.ArrayList;
 
 public class Board {
     private int[][] board;
+    private Ship[] ships;
     public Board(){
         board = new int[10][10];
+        ships = new Ship[0];
     }
 
     public void set(int x, int y, int val){
@@ -26,6 +28,19 @@ public class Board {
                 set(i,j,0);
             }
         }
+    }
+
+    public void addShip(Ship s){
+        Ship[] newships = new Ship[ships.length+1];
+        for (int i = 0 ; i < ships.length; i++){
+            newships[i] = ships[i];
+        }
+        newships[ships.length] = s;
+        ships = newships;
+    }
+
+    public Ship[] getShips(){
+        return ships;
     }
 
 }

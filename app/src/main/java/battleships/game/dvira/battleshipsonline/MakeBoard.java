@@ -95,6 +95,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
                     break;
                 case 5:
                     len = 0; // need to add dialog box;
+                    Toast.makeText(this, board.getShips().length+"", Toast.LENGTH_SHORT).show();
                     break;
             }
 
@@ -186,34 +187,44 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
         }
 
         //check if you are around a ship
+
         return true;
     }
 
     private void addNew(){
+        Ship s = new Ship(len);
         switch (dir){
             case 0:
                 drawboard();
                 for (int i = 0; i < len; i ++){
                     board.set(selected[0]+i, selected[1], 1);
+                    s.addLocation(selected[0]+i, selected[1]);
                 }
+                board.addShip(s);
                 return;
             case 1:
                 drawboard();
                 for (int i = 0; i < len; i ++){
                     board.set(selected[0], selected[1]+i, 1);
+                    s.addLocation(selected[0], selected[1]+i);
                 }
+                board.addShip(s);
                 return;
             case 2:
                 drawboard();
                 for (int i = 0; i < len; i ++){
                     board.set(selected[0]-i, selected[1], 1);
+                    s.addLocation(selected[0]-i, selected[1]);
                 }
+                board.addShip(s);
                 return;
             case 3:
                 drawboard();
                 for (int i = 0; i < len; i ++){
                     board.set(selected[0], selected[1]-i, 1);
+                    s.addLocation(selected[0], selected[1]-i);
                 }
+                board.addShip(s);
                 return;
         }
     }
