@@ -8,6 +8,12 @@ import java.util.ArrayList;
  */
 
 public class Board implements Serializable{
+    //defining types
+    final static public int SEA = 0;
+    final static public int SHIP = 1;
+    final static public int MISS = 2;
+    final static public int HIT = 3;
+
     private int[][] board;
     private Ship[] ships;
     public Board(){
@@ -50,6 +56,24 @@ public class Board implements Serializable{
             str += "Ship at" + ships[i].locations[0][0] + ", " + ships[i].locations[0][1] + "\n";
         }
         return str;
+    }
+
+    public Ship getShip(int x, int y){
+        for (int i = 0;i < ships.length; i++){
+            for (int j = 0; j < ships[i].locations.length; j++){
+                if (x == ships[i].locations[j][0] && y == ships[i].locations[j][1]){
+                    return ships[i];
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean isShipSunk(Ship s){
+        for (int i = 0; i < s.locations.length; i++){
+            if (board[s.locations[i][0]][s.locations[i][1]] == Board.SHIP) return false;
+        }
+        return true;
     }
 
 }

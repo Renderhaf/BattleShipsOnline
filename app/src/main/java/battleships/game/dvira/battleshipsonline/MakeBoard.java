@@ -38,7 +38,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
         shipnum = 0;
         dir = 0;
         len = 3;
-        endships = 1;
+        endships = 5;
         selected = new int[2];
         board = new Board();
 
@@ -67,7 +67,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
                         selected[0] = i;
                         selected[1] = j;
                         dir = 0;
-                        places[i][j].setImageResource(R.drawable.red);
+                        places[i][j].setImageResource(R.drawable.black);
                     } else {
                         dir = (dir + 1) % 4;
                     }
@@ -126,7 +126,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
         if (!checkdir()){
             drawboard();
             setbtn.setClickable(false);
-            places[selected[0]][selected[1]].setImageResource(R.drawable.red);
+            places[selected[0]][selected[1]].setImageResource(R.drawable.black);
             return;
         }
         setbtn.setClickable(true);
@@ -134,25 +134,25 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             case 0:
                 drawboard();
                 for (int i = 0; i < len; i ++){
-                    places[selected[0]+i][selected[1]].setImageResource(R.drawable.red);
+                    places[selected[0]+i][selected[1]].setImageResource(R.drawable.black);
                 }
                 return;
             case 1:
                 drawboard();
                 for (int i = 0; i < len; i ++){
-                    places[selected[0]][selected[1]+i].setImageResource(R.drawable.red);
+                    places[selected[0]][selected[1]+i].setImageResource(R.drawable.black);
                 }
                 return;
             case 2:
                 drawboard();
                 for (int i = 0; i < len; i ++){
-                    places[selected[0]-i][selected[1]].setImageResource(R.drawable.red);
+                    places[selected[0]-i][selected[1]].setImageResource(R.drawable.black);
                 }
                 return;
             case 3:
                 drawboard();
                 for (int i = 0; i < len; i ++){
-                    places[selected[0]][selected[1]-i].setImageResource(R.drawable.red);
+                    places[selected[0]][selected[1]-i].setImageResource(R.drawable.black);
                 }
                 return;
         }
@@ -163,7 +163,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
                 if (board.get(i,j) == 0)
                     places[i][j].setImageResource(R.drawable.sea);
                 else if (board.get(i,j) == 1)
-                    places[i][j].setImageResource(R.drawable.red);
+                    places[i][j].setImageResource(R.drawable.black);
             }
         }
     }
@@ -218,7 +218,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             case 0:
                 drawboard();
                 for (int i = 0; i < len; i ++){
-                    board.set(selected[0]+i, selected[1], 1);
+                    board.set(selected[0]+i, selected[1], Board.SHIP);
                     s.addLocation(selected[0]+i, selected[1]);
                 }
                 board.addShip(s);
@@ -226,7 +226,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             case 1:
                 drawboard();
                 for (int i = 0; i < len; i ++){
-                    board.set(selected[0], selected[1]+i, 1);
+                    board.set(selected[0], selected[1]+i, Board.SHIP);
                     s.addLocation(selected[0], selected[1]+i);
                 }
                 board.addShip(s);
@@ -234,7 +234,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             case 2:
                 drawboard();
                 for (int i = 0; i < len; i ++){
-                    board.set(selected[0]-i, selected[1], 1);
+                    board.set(selected[0]-i, selected[1], Board.SHIP);
                     s.addLocation(selected[0]-i, selected[1]);
                 }
                 board.addShip(s);
@@ -242,7 +242,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             case 3:
                 drawboard();
                 for (int i = 0; i < len; i ++){
-                    board.set(selected[0], selected[1]-i, 1);
+                    board.set(selected[0], selected[1]-i, Board.SHIP);
                     s.addLocation(selected[0], selected[1]-i);
                 }
                 board.addShip(s);

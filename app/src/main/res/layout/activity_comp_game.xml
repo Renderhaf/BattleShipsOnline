@@ -1125,6 +1125,14 @@ tools:context="battleships.game.dvira.battleshipsonline.CompGame">
             android:text="Opponents Board"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title" />
 
+        <Button
+            android:id="@+id/btnnext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Next Turn" />
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

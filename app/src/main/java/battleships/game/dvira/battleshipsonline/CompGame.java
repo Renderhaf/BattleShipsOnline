@@ -1,9 +1,13 @@
 package battleships.game.dvira.battleshipsonline;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -15,11 +19,12 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
     private ImageButton[][] places;
     private Button homebutton;
     private Button switchbutton;
-    private boolean playerboard;
+    protected boolean playerboard;
     private Player player;
     private AutoPlayer complayer;
     private Game game;
     private TextView boardname;
+    private Button nxtbutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,8 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
         switchbutton = (Button) findViewById(R.id.btnswitch);
         switchbutton.setOnClickListener(this);
         boardname = (TextView) findViewById(R.id.boardname);
+        nxtbutton = (Button) findViewById(R.id.btnnext);
+        nxtbutton.setOnClickListener(this);
         places = new ImageButton[10][10];
         playerboard = false;
 
@@ -47,9 +54,9 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
         }
 
         player = (Player) getIntent().getSerializableExtra("player");
-        complayer = new AutoPlayer();
-        game = new Game(player, complayer);
-        drawboard(complayer.getBoard());
+        complayer = new AutoPlayer(10,10);
+        game = new Game(player, complayer, this);
+        drawenemyboard(complayer.getBoard());
     }
 
     public void onClick(View v){
@@ -59,26 +66,74 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
         }
 
         if (v.getId() == switchbutton.getId()){
-            if(playerboard){
-                boardname.setText("Opponents Board");
-                drawboard(complayer.getBoard());
-            } else {
-                boardname.setText("Your Board");
-                drawboard(player.getBoard());
+            switchBoard();
+        }
+
+        for (int i = 0 ; i < 10; i ++){
+            for (int j = 0; j < 10; j++){
+                if (v.getId() == places[i][j].getId() && game.turn == 0 && !playerboard){
+                    int[] ns = {i,j};
+
+                    player.setSelected(ns);
+                    game.getTurn();
+                    drawenemyboard(complayer.board);
+                    game.nextTurn();
+                    nxtbutton.setClickable(true);
+                }
             }
-            playerboard = !playerboard;
+        }
+
+        if (v.getId() == nxtbutton.getId()){
+            if (game.turn == 0){
+                switchBoard();
+                nxtbutton.setClickable(false);
+            } else {
+                switchBoard();
+                game.nextTurn();
+                drawboard(player.board);
+            }
         }
 
     }
 
-    private void drawboard(Board board){
+    protected void drawboard(Board board){
         for (int i = 0 ; i < 10; i++){
             for (int j = 0 ; j < 10; j ++){
-                if (board.get(i,j) == 0)
+                if (board.get(i,j) == Board.SEA)
                     places[i][j].setImageResource(R.drawable.sea);
-                else if (board.get(i,j) == 1)
+                else if (board.get(i,j) == Board.SHIP)
+                    places[i][j].setImageResource(R.drawable.black);
+                else if (board.get(i,j) == Board.HIT)
                     places[i][j].setImageResource(R.drawable.red);
+                else if (board.get(i,j) == Board.MISS)
+                    places[i][j].setImageResource(R.drawable.gray);
             }
         }
+    }
+
+    protected void drawenemyboard(Board board){
+        for (int i = 0 ; i < 10; i++){
+            for (int j = 0 ; j < 10; j ++){
+                if (board.get(i,j) == Board.SEA)
+                    places[i][j].setImageResource(R.drawable.sea);
+                else if (board.get(i,j) == Board.SHIP)
+                    places[i][j].setImageResource(R.drawable.sea);
+                else if (board.get(i,j) == Board.HIT)
+                    places[i][j].setImageResource(R.drawable.red);
+                else if (board.get(i,j) == Board.MISS)
+                    places[i][j].setImageResource(R.drawable.gray);
+            }
+        }
+    }
+
+    protected void switchBoard(){
+        if(playerboard){
+            boardname.setText("Opponents Board");
+            drawenemyboard(complayer.getBoard());
+        } else {
+            boardname.setText("Your Board");
+            drawboard(player.getBoard());
+        }
+        playerboard = !playerboard;
     }
 }
