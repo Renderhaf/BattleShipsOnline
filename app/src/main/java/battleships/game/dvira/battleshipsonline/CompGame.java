@@ -25,6 +25,7 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
     private Game game;
     private TextView boardname;
     private Button nxtbutton;
+    protected TextView turnnumText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
         boardname = (TextView) findViewById(R.id.boardname);
         nxtbutton = (Button) findViewById(R.id.btnnext);
         nxtbutton.setOnClickListener(this);
+        turnnumText = (TextView) findViewById(R.id.turnnumText);
         places = new ImageButton[10][10];
         playerboard = false;
 
@@ -54,7 +56,8 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
         }
 
         player = (Player) getIntent().getSerializableExtra("player");
-        complayer = new AutoPlayer(10,10);
+        int shipnum = (int) getIntent().getIntExtra("shipnum", 3);
+        complayer = new AutoPlayer(10,10, shipnum);
         game = new Game(player, complayer, this);
         drawenemyboard(complayer.getBoard());
     }
@@ -117,7 +120,7 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
                 if (board.get(i,j) == Board.SEA)
                     places[i][j].setImageResource(R.drawable.sea);
                 else if (board.get(i,j) == Board.SHIP)
-                    places[i][j].setImageResource(R.drawable.sea);
+                    places[i][j].setImageResource(R.drawable.black); // NEEDS TO BE CHANGED BACK TO SEA ----------------------
                 else if (board.get(i,j) == Board.HIT)
                     places[i][j].setImageResource(R.drawable.red);
                 else if (board.get(i,j) == Board.MISS)

@@ -1131,7 +1131,18 @@ tools:context="battleships.game.dvira.battleshipsonline.CompGame">
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="Next Turn" />
+            android:text="Next Turn"
+            android:textColor="#990000"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/turnnumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/btnhome"
+            android:layout_marginLeft="5dp"
+            android:text="Turn : 0" />
 
     </RelativeLayout>
 

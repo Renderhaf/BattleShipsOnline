@@ -1,5 +1,8 @@
 package battleships.game.dvira.battleshipsonline;
 
+import android.media.MediaPlayer;
+import android.widget.Toast;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +13,7 @@ public class Player implements Serializable {
     protected Board board;
     private int[] selected;
     String name;
+
     public Player(Board b){
         board = b;
         selected = new int[2];

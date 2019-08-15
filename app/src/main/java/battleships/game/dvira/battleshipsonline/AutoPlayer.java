@@ -25,16 +25,18 @@ public class AutoPlayer extends Player implements Serializable{
     int startx = 0;
     int starty = 0;
 
-    public AutoPlayer(int w, int h){
+    public AutoPlayer(int w, int h, int shipnum){
         super(new Board());
-        setBoard(buildBoard(5));
+        setBoard(buildBoard(shipnum));
         Log.d("L ", board.toString());
         this.w = w;
         this.h = h;
         picked = new int[w][h];
     }
 
-    private Board buildBoard(int amount){
+    private Board buildBoard(int shipnum){
+        int amount = shipnum;
+        if (amount > 5) amount = 5;
         int[] lens = {3,3,5,2,1};
         Board b = new Board();
 

@@ -38,7 +38,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
         shipnum = 0;
         dir = 0;
         len = 3;
-        endships = 5;
+        endships = 1;
         selected = new int[2];
         board = new Board();
 
@@ -95,8 +95,10 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 Player p = new Player(board);
+                                int shipnum = board.getShips().length;
                                 Intent i = new Intent(MakeBoard.this, CompGame.class);
                                 i.putExtra("player", p);
+                                i.putExtra("shipnum", shipnum);
                                 startActivity(i);
                             }
                         });
@@ -126,7 +128,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
         if (!checkdir()){
             drawboard();
             setbtn.setClickable(false);
-            places[selected[0]][selected[1]].setImageResource(R.drawable.black);
+            places[selected[0]][selected[1]].setImageResource(R.drawable.red);
             return;
         }
         setbtn.setClickable(true);
