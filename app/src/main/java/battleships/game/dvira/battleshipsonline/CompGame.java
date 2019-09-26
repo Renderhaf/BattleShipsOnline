@@ -1,6 +1,7 @@
 package battleships.game.dvira.battleshipsonline;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -26,11 +27,13 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
     private TextView boardname;
     private Button nxtbutton;
     protected TextView turnnumText;
+    private StorageManager sm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comp_game);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         homebutton = (Button) findViewById(R.id.btnhome);
         homebutton.setOnClickListener(this);
@@ -42,6 +45,8 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
         turnnumText = (TextView) findViewById(R.id.turnnumText);
         places = new ImageButton[10][10];
         playerboard = false;
+
+        sm = new StorageManager(this);
 
         String str;
         int resID;
@@ -120,7 +125,10 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
                 if (board.get(i,j) == Board.SEA)
                     places[i][j].setImageResource(R.drawable.sea);
                 else if (board.get(i,j) == Board.SHIP)
-                    places[i][j].setImageResource(R.drawable.black); // NEEDS TO BE CHANGED BACK TO SEA ----------------------
+                    if (sm.getBoolean("devMode",false))
+                        places[i][j].setImageResource(R.drawable.black);
+                    else
+                        places[i][j].setImageResource(R.drawable.sea);
                 else if (board.get(i,j) == Board.HIT)
                     places[i][j].setImageResource(R.drawable.red);
                 else if (board.get(i,j) == Board.MISS)

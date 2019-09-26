@@ -1,7 +1,9 @@
 package battleships.game.dvira.battleshipsonline;
 
+import android.accessibilityservice.GestureDescription;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,22 +25,25 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
     Board board;
     int shipnum;
     int endships;
+    private StorageManager sm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_board);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         places = new ImageButton[10][10];
         homebutton = (Button) findViewById(R.id.btnhome);
         homebutton.setOnClickListener(this);
         setbtn = (Button) findViewById(R.id.setbtn);
         setbtn.setOnClickListener(this);
+        sm = new StorageManager(this);
+
 
         shipnum = 0;
         dir = 0;
         len = 3;
-        endships = 1;
+        endships = sm.getInt("shipnum",5);
         selected = new int[2];
         board = new Board();
 

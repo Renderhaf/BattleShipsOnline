@@ -21,6 +21,7 @@ public class Game {
     MediaPlayer plop;
     int turnnum;
     StorageManager sm;
+    boolean soundEffects;
 
     public Game(Player p1, Player p2, CompGame g){
         this.p1 = p1;
@@ -36,6 +37,7 @@ public class Game {
         sm = new StorageManager(g);
         // DEBUG NEEDS TO BE TAKEN OUT TODO
         sm.setInt("highscore", 1000);
+        soundEffects = sm.getBoolean("soundEffects", true);
     }
 
     public void nextTurn(){
@@ -69,30 +71,11 @@ public class Game {
                 if (isSunk(p2, selected[0],selected[1])) {
                     Toast.makeText(g.getApplicationContext(), "You sunk a ship!", Toast.LENGTH_SHORT).show();
                     if (isWin(p2)){
-                        AlertDialog alertDialog = new AlertDialog.Builder(g).create();
-                        alertDialog.setTitle("You Won!");
-                        alertDialog.setMessage("\nYou have won the game after " + turnnum + "turns");
-                        if (sm.getInt("highscore", 1000) > turnnum){
-                            alertDialog.setMessage("\nNew high score! old high score was " + sm.getInt("highscore", 1000));
+                        if (sm.getBoolean("devMode",false) || sm.getInt("shipnum", 5) != 5){
+                            breakDevMode(); //breaks if not in regular mode (shipnum is not 5 or dev mode is on)
                         } else {
-                            alertDialog.setMessage("\nYour high score is " + sm.getInt("highscore", 1000));
+                            playerWin();
                         }
-                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        if (sm.getInt("highscore", 1000) > turnnum){
-                                            sm.setInt("highscore", turnnum);
-                                            Intent i = new Intent(g.getApplicationContext(), NewHS.class);
-                                            i.putExtra("score",turnnum);
-                                            g.startActivity(i);
-                                        } else {
-                                            Intent i = new Intent(g.getApplicationContext(), Menu.class);
-                                            g.startActivity(i);
-                                        }
-                                    }
-                                });
-                        alertDialog.show();
                     }
                 }
 
@@ -116,6 +99,20 @@ public class Game {
                 p2.hitSomething(selected[0],selected[1],true);
                 p2.sunkAShip(selected[0], selected[1], isSunk(p1, selected[0],selected[1]));
 
+                if (isSunk(p1, selected[0],selected[1]) && isWin(p1)){
+                    AlertDialog alertDialog = new AlertDialog.Builder(g).create();
+                    alertDialog.setTitle("You Lost!");
+                    alertDialog.setMessage("\nYou have lost the game after " + turnnum + " turns");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent i = new Intent(g.getApplicationContext(), Menu.class);
+                                    g.startActivity(i);
+                                }
+                            });
+                    alertDialog.show();
+                }
                 hitsound();
                 return true;
             }
@@ -128,13 +125,13 @@ public class Game {
     }
 
     private void hitsound(){
-
-        hit.start();
+        if (soundEffects)
+            hit.start();
     }
 
     private void plopsound(){
-
-        plop.start();
+        if (soundEffects)
+            plop.start();
     }
 
     private boolean isWin(Player p){
@@ -145,5 +142,47 @@ public class Game {
             }
         }
         return true;
+    }
+    private void playerWin(){
+        AlertDialog alertDialog = new AlertDialog.Builder(g).create();
+        alertDialog.setTitle("You Won!");
+        alertDialog.setMessage("\nYou have won the game after " + turnnum + " turns");
+        if (sm.getInt("highscore", 1000) > turnnum){
+            alertDialog.setMessage("\nNew high score! old high score was " + sm.getInt("highscore", 1000));
+        } else {
+            alertDialog.setMessage("\nYour high score is " + sm.getInt("highscore", 1000));
+        }
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        if (sm.getInt("highscore", 1000) > turnnum){
+                            sm.setInt("highscore", turnnum);
+                            Intent i = new Intent(g.getApplicationContext(), NewHS.class);
+                            i.putExtra("score",turnnum);
+                            g.startActivity(i);
+                        } else {
+                            Intent i = new Intent(g.getApplicationContext(), Menu.class);
+                            g.startActivity(i);
+                        }
+                    }
+                });
+        alertDialog.show();
+    }
+
+    private void breakDevMode(){
+        AlertDialog alertDialog = new AlertDialog.Builder(g).create();
+        alertDialog.setTitle("You Won!");
+        alertDialog.setMessage("\nYou have won the game after " + turnnum + " turns");
+        alertDialog.setMessage("Unfortunetly, you cannot save your score if dev mode is turned on or if Shipnum is not 5");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent i = new Intent(g.getApplicationContext(), Menu.class);
+                        g.startActivity(i);
+                    }
+                });
+        alertDialog.show();
     }
 }

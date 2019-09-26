@@ -19,7 +19,8 @@
         <activity android:name=".Menu" />
         <activity android:name=".MakeBoard" />
         <activity android:name=".CompGame" />
-        <activity android:name=".NewHS"></activity>
+        <activity android:name=".NewHS" />
+        <activity android:name=".Settings"></activity>
     </application>
 
 </manifest>

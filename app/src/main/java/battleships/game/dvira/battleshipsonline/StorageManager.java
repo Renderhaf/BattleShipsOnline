@@ -13,7 +13,7 @@ public class StorageManager {
     SharedPreferences.Editor editor;
 
     public StorageManager(Activity a){
-        sp = a.getPreferences(Context.MODE_PRIVATE);
+        sp = a.getApplicationContext().getSharedPreferences("battleships.game.dvira.PREFRENCE_FILE", Context.MODE_PRIVATE);
         editor = sp.edit();
     }
     public int getInt(String name, int defaultv){
