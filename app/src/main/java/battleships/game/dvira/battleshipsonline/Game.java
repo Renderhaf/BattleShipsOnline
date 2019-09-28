@@ -71,7 +71,7 @@ public class Game {
                 if (isSunk(p2, selected[0],selected[1])) {
                     Toast.makeText(g.getApplicationContext(), "You sunk a ship!", Toast.LENGTH_SHORT).show();
                     if (isWin(p2)){
-                        if (sm.getBoolean("devMode",false) || sm.getInt("shipnum", 5) != 5){
+                        if (sm.getBoolean("devMode",false) || sm.getInt("shipnum", 5) != 5){ //TODO need to reset this
                             breakDevMode(); //breaks if not in regular mode (shipnum is not 5 or dev mode is on)
                         } else {
                             playerWin();

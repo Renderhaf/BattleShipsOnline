@@ -60,9 +60,9 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
                     finish();
                     boolean success = fm.putNewScore(nametxt.getText().toString(), score);
                     if (success){
-                        Intent i = new Intent(NewHS.this, Menu.class);
-                        startActivity(i);
-                    } else {
+//                        Intent i = new Intent(NewHS.this, Menu.class);
+//                        startActivity(i);
+                    } else { //TODO this crashes it, need to fix
                         Toast.makeText(NewHS.this, "Name Already Exists! Please Choose Another Name!", Toast.LENGTH_SHORT).show();
                     }
 

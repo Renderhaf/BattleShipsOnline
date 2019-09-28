@@ -30,7 +30,7 @@ public class Leaderboards extends AppCompatActivity  implements View.OnClickList
 
         LeaderBoardsList = (ListView) findViewById(R.id.leaderboardsList);
 
-        if(fm.getScores().entrySet().toArray().length != 0){
+        if(fm.getScores().size() != 0){
             updateListView();
         } else {
             try {
@@ -39,6 +39,7 @@ public class Leaderboards extends AppCompatActivity  implements View.OnClickList
                 e.printStackTrace();
             }
         }
+
     }
 
     public void onClick(View v){
@@ -46,13 +47,13 @@ public class Leaderboards extends AppCompatActivity  implements View.OnClickList
 
     public void updateListView(){
         ArrayList<String> leaderboards = new ArrayList<>();
-        Map<String,Integer> scores = fm.getScores();
-        int num = scores.entrySet().toArray().length;
-        for(Map.Entry<String,Integer> e : scores.entrySet()){
+        ArrayList<Map.Entry<String,Integer>> scores = fm.getScores();
+        int num = 1;
+        for(Map.Entry<String,Integer> e : scores){
             leaderboards.add(num + ". " + e.getKey() + " - " + e.getValue());
-            num--;
+            num++;
         }
-        Collections.reverse(leaderboards);
+//        Collections.reverse(leaderboards);
 
         ArrayAdapter adapter = new ArrayAdapter<String>(Leaderboards.this,R.layout.support_simple_spinner_dropdown_item,leaderboards);
         LeaderBoardsList.setAdapter(adapter);

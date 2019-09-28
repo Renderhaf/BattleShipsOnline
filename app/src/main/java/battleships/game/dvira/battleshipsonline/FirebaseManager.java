@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,6 +15,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -25,17 +27,17 @@ import java.util.concurrent.Callable;
 public class FirebaseManager {
     private static FirebaseManager instance;
     private FirebaseDatabase mDatabase;
-    private Map<String, Integer> scoresMap;
+    private ArrayList<Map.Entry<String, Integer>> scoresMap;
 
     private FirebaseManager(){
         mDatabase = FirebaseDatabase.getInstance();
-        scoresMap = new HashMap<>();
+        scoresMap = new ArrayList<>();
         this.updateScores();
 
 //        //TODO remove this
-////        scoresMap.put("TEST", 37);
-//        mDatabase.getReference().child("leaderboards").child("Users").child("Testuser").setValue("500");
-//        mDatabase.getReference().child("leaderboards").child("Users").child("Testuser2").setValue("75");
+//        mDatabase.getReference().child("leaderboards").child("Users").child("Testuser").setValue(500);
+//        mDatabase.getReference().child("leaderboards").child("Users").child("Testuser2").setValue(75);
+//        mDatabase.getReference().child("leaderboards").child("Users").child("Renderhaf").setValue(37);
 
     }
 
@@ -54,8 +56,9 @@ public class FirebaseManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String,Integer> scores = (Map<String,Integer>) dataSnapshot.getValue();
+                scoresMap = new ArrayList<>();
                 for (Map.Entry<String, Integer> entry : scores.entrySet()){
-                    scoresMap.put(entry.getKey(), entry.getValue());
+                    insertValue(entry);
                 }
                 try {
                     c.run();
@@ -80,8 +83,9 @@ public class FirebaseManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String,Integer> scores = (Map<String,Integer>) dataSnapshot.getValue();
+                scoresMap = new ArrayList<>();
                 for (Map.Entry<String, Integer> entry : scores.entrySet()){
-                    scoresMap.put(entry.getKey(), entry.getValue());
+                    insertValue(entry);
                 }
             }
 
@@ -94,27 +98,42 @@ public class FirebaseManager {
         byScore.addValueEventListener(postListener);
     }
 
-    public int getScore(String name){
-        return scoresMap.get(name);
-    }
-
-    public Map<String,Integer> getScores(){
+    public ArrayList<Map.Entry<String,Integer>> getScores(){
         return scoresMap;
     }
 
-    public Object[] getUsers(){
-        return scoresMap.keySet().toArray();
+    public String[] getUsers(){
+        String[] users = new String[scoresMap.size()];
+        int i = 0;
+        for (Map.Entry<String,Integer> entry : scoresMap){
+            users[i] = entry.getKey();
+            i++;
+        }
+        return users;
     }
 
-
     public boolean putNewScore(String name, int score){
-        Object[] users = this.getUsers();
-        for (Object s : users){
-            if (s.toString() == name){
+        String[] users = this.getUsers();
+        for (String s : users){
+            if (s.compareTo(name) == 0){
                 return false;
             }
         }
-        mDatabase.getReference().child("leaderboards").child("Users").setValue(name, score);
+        mDatabase.getReference().child("leaderboards").child("Users").child(name).setValue(score);
         return true;
     }
+
+    private void insertValue(Map.Entry<String,Integer> e){
+        for (int i = 0 ; i < scoresMap.size(); i++){
+            int val1 = Integer.parseInt(e.getValue() + "");//TODO understand what the heck is going on here
+            int val2 = Integer.parseInt(scoresMap.get(i).getValue() + "");
+            if (val1 < val2){
+                scoresMap.add(i,e);
+                return;
+            }
+        }
+
+        scoresMap.add(e);
+    }
+
 }
