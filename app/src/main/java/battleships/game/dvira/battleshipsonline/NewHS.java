@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class NewHS extends AppCompatActivity implements View.OnClickListener{
 
@@ -20,6 +21,7 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
     EditText nametxt;
     int score;
     ProgressBar pb;
+    FirebaseManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
         scoretv.setText("Score : " + score);
 
         nametxt.setHint("Name");
+
+        fm = FirebaseManager.getInstance();
     }
 
     public void onClick(View v){
@@ -54,13 +58,20 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
                     } catch (InterruptedException e) {
                     }
                     finish();
+                    boolean success = fm.putNewScore(nametxt.getText().toString(), score);
+                    if (success){
+                        Intent i = new Intent(NewHS.this, Menu.class);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(NewHS.this, "Name Already Exists! Please Choose Another Name!", Toast.LENGTH_SHORT).show();
+                    }
 
-                    Intent i = new Intent(NewHS.this, Menu.class);
-                    startActivity(i);
+
                 }
             };
 
             waitthread.start();
         }
     }
+
 }

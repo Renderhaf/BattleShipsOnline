@@ -4,13 +4,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class Leaderboards extends AppCompatActivity  implements View.OnClickListener{
 
     FirebaseManager fm;
-    Button getTestData;
+    ListView LeaderBoardsList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,15 +27,34 @@ public class Leaderboards extends AppCompatActivity  implements View.OnClickList
 
         fm = FirebaseManager.getInstance();
 
-        getTestData = (Button) findViewById(R.id.getTestDataBtn);
-        getTestData.setOnClickListener(this);
+
+        LeaderBoardsList = (ListView) findViewById(R.id.leaderboardsList);
+
+        if(fm.getScores().entrySet().toArray().length != 0){
+            updateListView();
+        } else {
+            try {
+                fm.updateScores(this::updateListView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void onClick(View v){
-        if (v.getId() == getTestData.getId()){
-            fm.updateScores();
-//            Toast.makeText(this, "Renderhafs score is : " + fm.getScore("TEST"), Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, "First stored score is : " + fm.getUsers()[0].toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    public void updateListView(){
+        ArrayList<String> leaderboards = new ArrayList<>();
+        Map<String,Integer> scores = fm.getScores();
+        int num = scores.entrySet().toArray().length;
+        for(Map.Entry<String,Integer> e : scores.entrySet()){
+            leaderboards.add(num + ". " + e.getKey() + " - " + e.getValue());
+            num--;
         }
+        Collections.reverse(leaderboards);
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(Leaderboards.this,R.layout.support_simple_spinner_dropdown_item,leaderboards);
+        LeaderBoardsList.setAdapter(adapter);
     }
 }
