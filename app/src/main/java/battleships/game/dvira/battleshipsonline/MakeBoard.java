@@ -84,7 +84,8 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             if (selected[0] == -1 && selected[1] == -1){
                 return;
             }
-            addNew();
+            board.addNewShipFromVals(len,dir,selected);
+            drawboard();
             selected[0] = -1;
             selected[1] = -1;
             dir = 0;
@@ -130,7 +131,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
         }
     }
     private void drawnewship(){
-        if (!checkdir()){
+        if (!board.checkShipDir(dir,selected,len)){
             drawboard();
             setbtn.setClickable(false);
             places[selected[0]][selected[1]].setImageResource(R.drawable.red);
@@ -174,86 +175,6 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             }
         }
     }
-    private boolean checkdir(){ // returns a boolean which states if you can lay a ship
-        switch (dir){
-            case 0:
-                if (selected[0] + len > 10) // check walls
-                    return false;
 
-                for (int i = 0; i < len; i ++){ // check for other ships
-                    if (board.get(selected[0]+i, selected[1]) == 1)
-                        return false;
-                }
-                break;
-            case 1:
-                if (selected[1] + len > 10)
-                    return false;
 
-                for (int i = 0; i < len; i ++){
-                    if (board.get(selected[0], selected[1]+i) == 1)
-                        return false;
-                }
-                break;
-            case 2:
-                if (selected[0] - len < 0)
-                    return false;
-
-                for (int i = 0; i < len; i ++){
-                    if (board.get(selected[0]-i, selected[1]) == 1)
-                        return false;
-                }
-                break;
-            case 3:
-                if (selected[1] - len < 0)
-                    return false;
-
-                for (int i = 0; i < len; i ++){
-                    if (board.get(selected[0], selected[1]-i) == 1)
-                        return false;
-                }
-                break;
-        }
-
-        //check if you are around a ship
-
-        return true;
-    }
-
-    private void addNew(){
-        Ship s = new Ship(len);
-        switch (dir){
-            case 0:
-                drawboard();
-                for (int i = 0; i < len; i ++){
-                    board.set(selected[0]+i, selected[1], Board.SHIP);
-                    s.addLocation(selected[0]+i, selected[1]);
-                }
-                board.addShip(s);
-                return;
-            case 1:
-                drawboard();
-                for (int i = 0; i < len; i ++){
-                    board.set(selected[0], selected[1]+i, Board.SHIP);
-                    s.addLocation(selected[0], selected[1]+i);
-                }
-                board.addShip(s);
-                return;
-            case 2:
-                drawboard();
-                for (int i = 0; i < len; i ++){
-                    board.set(selected[0]-i, selected[1], Board.SHIP);
-                    s.addLocation(selected[0]-i, selected[1]);
-                }
-                board.addShip(s);
-                return;
-            case 3:
-                drawboard();
-                for (int i = 0; i < len; i ++){
-                    board.set(selected[0], selected[1]-i, Board.SHIP);
-                    s.addLocation(selected[0], selected[1]-i);
-                }
-                board.addShip(s);
-                return;
-        }
-    }
 }

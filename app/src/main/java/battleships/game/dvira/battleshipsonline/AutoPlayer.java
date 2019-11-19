@@ -49,8 +49,8 @@ public class AutoPlayer extends Player implements Serializable{
                 selected[0] = rx;
                 selected[1] = ry;
                 rd = (int) (4 * Math.random());
-                if (checkdir(rd, selected, lens[i])){
-                    addNew(lens[i], rd, selected,b);
+                if (b.checkShipDir(rd, selected, lens[i])){
+                    b.addNewShipFromVals(lens[i],rd,selected);
                     break;
                 }
             }
@@ -59,87 +59,8 @@ public class AutoPlayer extends Player implements Serializable{
         return b;
     }
 
-    private boolean checkdir(int dir, int[] selected, int len){ // returns a boolean which states if you can lay a ship
-        switch (dir){
-            case 0:
-                if (selected[0] + len > 10) // check walls
-                    return false;
-
-                for (int i = 0; i < len; i ++){ // check for other ships
-                    if (board.get(selected[0]+i, selected[1]) == 1)
-                        return false;
-                }
-                break;
-            case 1:
-                if (selected[1] + len > 10)
-                    return false;
-
-                for (int i = 0; i < len; i ++){
-                    if (board.get(selected[0], selected[1]+i) == 1)
-                        return false;
-                }
-                break;
-            case 2:
-                if (selected[0] - len < 0)
-                    return false;
-
-                for (int i = 0; i < len; i ++){
-                    if (board.get(selected[0]-i, selected[1]) == 1)
-                        return false;
-                }
-                break;
-            case 3:
-                if (selected[1] - len < 0)
-                    return false;
-
-                for (int i = 0; i < len; i ++){
-                    if (board.get(selected[0], selected[1]-i) == 1)
-                        return false;
-                }
-                break;
-        }
-
-        //check if you are around a ship
-
-        return true;
-    }
-
     private int getRandomLocation(){
         return (int) (10 * Math.random());
-    }
-
-    private void addNew(int len, int dir, int[] selected, Board b){
-        Ship s = new Ship(len);
-        switch (dir){
-            case 0:
-                for (int i = 0; i < len; i ++){
-                    b.set(selected[0]+i, selected[1], Board.SHIP);
-                    s.addLocation(selected[0]+i, selected[1]);
-                }
-                b.addShip(s);
-                return;
-            case 1:
-                for (int i = 0; i < len; i ++){
-                    b.set(selected[0], selected[1]+i, Board.SHIP);
-                    s.addLocation(selected[0], selected[1]+i);
-                }
-                b.addShip(s);
-                return;
-            case 2:
-                for (int i = 0; i < len; i ++){
-                    b.set(selected[0]-i, selected[1], Board.SHIP);
-                    s.addLocation(selected[0]-i, selected[1]);
-                }
-                b.addShip(s);
-                return;
-            case 3:
-                for (int i = 0; i < len; i ++){
-                    b.set(selected[0], selected[1]-i, Board.SHIP);
-                    s.addLocation(selected[0], selected[1]-i);
-                }
-                b.addShip(s);
-                return;
-        }
     }
 
     @Override

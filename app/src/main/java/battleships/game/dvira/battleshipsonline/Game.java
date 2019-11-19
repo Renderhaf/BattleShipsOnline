@@ -3,6 +3,7 @@ package battleships.game.dvira.battleshipsonline;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -35,8 +36,6 @@ public class Game {
         plop.setVolume(volume, volume);
 
         sm = new StorageManager(g);
-        // DEBUG NEEDS TO BE TAKEN OUT TODO
-        sm.setInt("highscore", 1000);
         soundEffects = sm.getBoolean("soundEffects", true);
     }
 
@@ -50,6 +49,7 @@ public class Game {
         turnnum++;
         g.turnnumText.setText("Turn : " + turnnum);
     }
+
     public boolean getTurn(){
         int[] selected;
         if (turn == 0) {
@@ -71,12 +71,14 @@ public class Game {
                 if (isSunk(p2, selected[0],selected[1])) {
                     Toast.makeText(g.getApplicationContext(), "You sunk a ship!", Toast.LENGTH_SHORT).show();
                     if (isWin(p2)){
-                        if (sm.getBoolean("devMode",false) || sm.getInt("shipnum", 5) != 5){ //TODO need to reset this
+                        if (sm.getBoolean("devMode",false) || sm.getInt("shipnum", 5) != 5){
                             breakDevMode(); //breaks if not in regular mode (shipnum is not 5 or dev mode is on)
                         } else {
                             playerWin();
                         }
                     }
+                    //surround the ship
+                    p2.getBoard().surroundShipWithMissed(p2.getBoard().getShip(selected[0], selected[1]));
                 }
 
                 hitsound();
@@ -111,9 +113,16 @@ public class Game {
                                     g.startActivity(i);
                                 }
                             });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CALL MOM", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            g.startActivity(new Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:"+sm.getString("momNumber",""))));
+                        }
+                    });
                     alertDialog.show();
                 }
                 hitsound();
+//                p1.getBoard().surroundShipWithMissed(p1.getBoard().getShip(selected[0], selected[1]));
                 return true;
             }
             else return false;

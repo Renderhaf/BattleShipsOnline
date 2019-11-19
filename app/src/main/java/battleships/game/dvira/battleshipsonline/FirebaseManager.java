@@ -34,7 +34,6 @@ public class FirebaseManager {
         scoresMap = new ArrayList<>();
         this.updateScores();
 
-//        //TODO remove this
 //        mDatabase.getReference().child("leaderboards").child("Users").child("Testuser").setValue(500);
 //        mDatabase.getReference().child("leaderboards").child("Users").child("Testuser2").setValue(75);
 //        mDatabase.getReference().child("leaderboards").child("Users").child("Renderhaf").setValue(37);
@@ -65,6 +64,7 @@ public class FirebaseManager {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                cleanData();
             }
 
             @Override
@@ -87,6 +87,7 @@ public class FirebaseManager {
                 for (Map.Entry<String, Integer> entry : scores.entrySet()){
                     insertValue(entry);
                 }
+                cleanData();
             }
 
             @Override
@@ -125,7 +126,7 @@ public class FirebaseManager {
 
     private void insertValue(Map.Entry<String,Integer> e){
         for (int i = 0 ; i < scoresMap.size(); i++){
-            int val1 = Integer.parseInt(e.getValue() + "");//TODO understand what the heck is going on here
+            int val1 = Integer.parseInt(e.getValue() + "");//TODO review this
             int val2 = Integer.parseInt(scoresMap.get(i).getValue() + "");
             if (val1 < val2){
                 scoresMap.add(i,e);
@@ -134,6 +135,15 @@ public class FirebaseManager {
         }
 
         scoresMap.add(e);
+    }
+
+    private void cleanData(){
+        String key = "";
+        while (scoresMap.size() > 10){
+            key = scoresMap.get(scoresMap.size()-1).getKey();
+            mDatabase.getReference().child("leaderboards").child("Users").child(key).removeValue();
+            scoresMap.remove(scoresMap.get(scoresMap.size()-1));
+        }
     }
 
 }

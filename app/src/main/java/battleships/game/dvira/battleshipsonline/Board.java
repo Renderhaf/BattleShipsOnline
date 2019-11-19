@@ -1,5 +1,7 @@
 package battleships.game.dvira.battleshipsonline;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -76,4 +78,156 @@ public class Board implements Serializable{
         return true;
     }
 
+    public boolean checkShipDir(int dir, int[] selected, int len){ // returns a boolean which states if you can lay a ship
+        int x,y;
+        int xmul, ymul;
+//        switch (dir){
+//            case 0:
+//                if (selected[0] + len > 10) // check walls
+//                    return false;
+//
+//                for (int i = 0; i < len; i ++){ // check for other ships
+//                    if (get(selected[0]+i, selected[1]) == 1)
+//                        return false;
+//
+//                    if (inRange(selected[0]))
+//                }
+//                break;
+//            case 1:
+//                if (selected[1] + len > 10)
+//                    return false;
+//
+//                for (int i = 0; i < len; i ++){
+//                    if (get(selected[0], selected[1]+i) == 1)
+//                        return false;
+//                }
+//                break;
+//            case 2:
+//                if (selected[0] - len < 0)
+//                    return false;
+//
+//                for (int i = 0; i < len; i ++){
+//                    if (get(selected[0]-i, selected[1]) == 1)
+//                        return false;
+//                }
+//                break;
+//            case 3:
+//                if (selected[1] - len < 0)
+//                    return false;
+//
+//                for (int i = 0; i < len; i ++){
+//                    if (get(selected[0], selected[1]-i) == 1)
+//                        return false;
+//                }
+//                break;
+//        }
+
+        switch (dir){
+            case 0:
+                xmul = 1;
+                ymul = 0;
+
+                if (selected[0] + len > 10) // check walls
+                    return false;
+                break;
+
+            case 1:
+                xmul = 0;
+                ymul = 1;
+
+                if (selected[1] + len > 10)
+                    return false;
+                break;
+            case 2:
+                xmul = -1;
+                ymul = 0;
+
+                if (selected[0] - len < 0)
+                    return false;
+                break;
+            case 3:
+                xmul = 0;
+                ymul = -1;
+
+                if (selected[1] - len < 0)
+                    return false;
+                break;
+            default:
+                //should not get here;
+                xmul = 0;
+                ymul = 0;
+                break;
+        }
+
+        for (int i = 0; i < len; i ++){ // check for other ships
+            x = selected[0]+(i*xmul);
+            y = selected[1]+(i*ymul);
+
+            if (!checkIfBlockIsGood(x,y)) return false;
+        }
+
+        return true;
+    }
+
+    private boolean inRange(int x, int y){
+        return !(x>=board.length || x<0 || y>=board[0].length || y<0);
+    }
+
+    private boolean checkIfBlockIsGood(int x, int y){
+
+        for (int i = -1; i <= 1; i++){
+            for (int j = -1; j <= 1; j++){
+                if (inRange(x+i,y+j) && board[x+i][y+j] == Board.SHIP) return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void surroundShipWithMissed(Ship s){
+        int[][] locs = s.locations;
+        for (int[] loc : locs){
+            for (int i = -1; i<=1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    if (inRange(loc[0]+i, loc[1]+j) && board[loc[0]+i][loc[1]+j] == Board.SEA){
+                        board[loc[0]+i][loc[1]+j] = Board.MISS;
+                    }
+                }
+            }
+        }
+    }
+
+    public void addNewShipFromVals(int len, int dir, int[] selected){
+        Ship s = new Ship(len);
+        switch (dir){
+            case 0:
+                for (int i = 0; i < len; i ++){
+                    set(selected[0]+i, selected[1], Board.SHIP);
+                    s.addLocation(selected[0]+i, selected[1]);
+                }
+                addShip(s);
+                return;
+            case 1:
+                for (int i = 0; i < len; i ++){
+                    set(selected[0], selected[1]+i, Board.SHIP);
+                    s.addLocation(selected[0], selected[1]+i);
+                }
+                addShip(s);
+                return;
+            case 2:
+                for (int i = 0; i < len; i ++){
+                    set(selected[0]-i, selected[1], Board.SHIP);
+                    s.addLocation(selected[0]-i, selected[1]);
+                }
+                addShip(s);
+                return;
+            case 3:
+                for (int i = 0; i < len; i ++){
+                    set(selected[0], selected[1]-i, Board.SHIP);
+                    s.addLocation(selected[0], selected[1]-i);
+                }
+                addShip(s);
+                return;
+        }
+    }
 }

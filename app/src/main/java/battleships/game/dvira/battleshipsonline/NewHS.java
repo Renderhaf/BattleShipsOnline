@@ -22,6 +22,7 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
     int score;
     ProgressBar pb;
     FirebaseManager fm;
+    String badCharsKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +42,28 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
         nametxt.setHint("Name");
 
         fm = FirebaseManager.getInstance();
+
+        badCharsKey = ".";
     }
 
     public void onClick(View v){
         if (v.getId() == submitbtn.getId()){
-            //put new highscore in database -----------------------------TODO
+            //check name
+            for (int i = 0; i < badCharsKey.length(); i++){
+                if (nametxt.getText().toString().contains(""+badCharsKey.charAt(i))) {
+                    Toast.makeText(this, "BAD NAME", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            //save to database
+            boolean success = fm.putNewScore(nametxt.getText().toString(), score);
+            if (success){
+                Toast.makeText(this, "Score Saved!", Toast.LENGTH_SHORT).show();
+            } else { //TODO this crashes it, need to fix
+                Toast.makeText(NewHS.this, "Name Already Exists! Please Choose Another Name!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             pb.setVisibility(View.VISIBLE);
             final Thread waitthread = new Thread() {
@@ -58,14 +76,8 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
                     } catch (InterruptedException e) {
                     }
                     finish();
-                    boolean success = fm.putNewScore(nametxt.getText().toString(), score);
-                    if (success){
-//                        Intent i = new Intent(NewHS.this, Menu.class);
-//                        startActivity(i);
-                    } else { //TODO this crashes it, need to fix
-                        Toast.makeText(NewHS.this, "Name Already Exists! Please Choose Another Name!", Toast.LENGTH_SHORT).show();
-                    }
-
+                    Intent i = new Intent(NewHS.this, Menu.class);
+                    startActivity(i);
 
                 }
             };
