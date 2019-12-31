@@ -1,5 +1,6 @@
 package battleships.game.dvira.battleshipsonline;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,8 @@ public class Leaderboards extends AppCompatActivity  implements View.OnClickList
 
     FirebaseManager fm;
     ListView LeaderBoardsList;
+    Button backbutton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +43,15 @@ public class Leaderboards extends AppCompatActivity  implements View.OnClickList
             }
         }
 
+        backbutton = (Button) findViewById(R.id.backBtn2);
+        backbutton.setOnClickListener(this);
     }
 
     public void onClick(View v){
+        if (v.getId() == backbutton.getId()){
+            Intent i = new Intent(this, Menu.class);
+            startActivity(i);
+        }
     }
 
     public void updateListView(){

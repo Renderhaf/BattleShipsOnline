@@ -24,6 +24,8 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
     FirebaseManager fm;
     String badCharsKey;
 
+    Button backbutton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,9 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
         fm = FirebaseManager.getInstance();
 
         badCharsKey = ".";
+
+        backbutton = (Button) findViewById(R.id.backBtn3);
+        backbutton.setOnClickListener(this);
     }
 
     public void onClick(View v){
@@ -83,6 +88,11 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
             };
 
             waitthread.start();
+        }
+
+        else if (v.getId() == backbutton.getId()){
+            Intent i = new Intent(this, Menu.class);
+            startActivity(i);
         }
     }
 

@@ -52,7 +52,7 @@ public class Game {
 
     public boolean getTurn(){
         int[] selected;
-        if (turn == 0) {
+        if (turn == 0) { // Player turn
             selected = p1.getSelected();
             if (p2.getBoard().get(selected[0],selected[1]) == Board.SEA){
                 p2.getBoard().set(selected[0],selected[1],Board.MISS);
@@ -86,7 +86,7 @@ public class Game {
             }
             else return false;
         }
-        else {
+        else { // AutoPlayers Turn
             selected = p2.getSelected();
             if (p1.getBoard().get(selected[0],selected[1]) == Board.SEA){
                 p1.getBoard().set(selected[0],selected[1],Board.MISS);

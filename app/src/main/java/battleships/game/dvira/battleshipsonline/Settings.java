@@ -28,6 +28,8 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
     TextView momPhoneTextView;
     Button momPhoneButton;
 
+    Button backbutton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +62,8 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
         momPhoneButton = (Button) findViewById(R.id.momContactButton);
         momPhoneButton.setOnClickListener(this);
 
-        Button testBtn = findViewById(R.id.testBtn37);
-        testBtn.setOnClickListener(this);
+        backbutton = (Button) findViewById(R.id.backBtn1);
+        backbutton.setOnClickListener(this);
     }
 
     public void onClick(View v){
@@ -96,11 +98,15 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
             highscoretext.setText(1000+"");
         }
 
-        else if (v.getId() == R.id.momContactButton){
+        else if (v.getId() == momPhoneButton.getId()){
             Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
             startActivityForResult(i, 1);
         }
 
+        else if (v.getId() == backbutton.getId()){
+            Intent i = new Intent(this, Menu.class);
+            startActivity(i);
+        }
     }
 
     protected void onActivityResult(int requestC, int resultC, Intent data){

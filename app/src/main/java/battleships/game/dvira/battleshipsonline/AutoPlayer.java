@@ -74,7 +74,6 @@ public class AutoPlayer extends Player implements Serializable{
                 if (!didSomething){
                     shipDir = shipDir;
                     didSomething = shipInspectCheck(startx, starty);
-
                 }
             }
 

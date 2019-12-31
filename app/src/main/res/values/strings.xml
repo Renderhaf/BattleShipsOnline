@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">BattleShips Online</string>
+    <string name="instructionsBody">
+        To start a game, go to the main menu and scroll down.\n
+        When you enter a game, decide the ship location by clicking on the board, then rotate it by clicking on the same location again.\n
+        To set the ship, click the "Set" button.\n
+        After you deploy the amount of ships defined in the game settings, the game will start.\n
+        To shoot a ship, click on a tile. If a ship is present there, the tile will turn red.\n
+        After your turn, click the "Next Turn" button, then you will see the AIs choice, and will be able to get another turn by clicking the "Next Turn" button again.\n
+        When a ship is destroyed, the surrounding blocks will become gray, to show that they do not have ships in them.\n
+        When a player loses all of his ships, the game is over.\n
+        If you lose the game, you will have the option of calling your mom (You can set the number in the game settings).\n
+    </string>
 </resources>
