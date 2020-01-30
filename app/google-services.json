@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "574307321727",
+    "firebase_url": "https://battleshipsonline-b6e1c.firebaseio.com",
+    "project_id": "battleshipsonline-b6e1c",
+    "storage_bucket": "battleshipsonline-b6e1c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574307321727:android:7d9919d6a0af24cc48bc4a",
+        "android_client_info": {
+          "package_name": "battleships.game.dvira.battleshipsonline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574307321727-t6ag8f6n60tqvilk4fh6l08k3lq0hqih.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "battleships.game.dvira.battleshipsonline",
+            "certificate_hash": "f65431c617f4b442031a6e4e4a0067e86b317aa4"
+          }
+        },
+        {
+          "client_id": "574307321727-od9i9s8rvaavp723ifvjthu11etfqie7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACZ5ds5LySwcwvHuntlTj9dhqFkb7jjjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574307321727-od9i9s8rvaavp723ifvjthu11etfqie7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
