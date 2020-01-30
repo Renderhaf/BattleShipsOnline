@@ -34,12 +34,9 @@ public class FirebaseManager {
         scoresMap = new ArrayList<>();
         this.updateScores();
 
-//        mDatabase.getReference().child("leaderboards").child("Users").child("Testuser").setValue(500);
-//        mDatabase.getReference().child("leaderboards").child("Users").child("Testuser2").setValue(75);
-//        mDatabase.getReference().child("leaderboards").child("Users").child("Renderhaf").setValue(37);
-
     }
 
+    //since the manager is a singleton, you can get its static instance from this function
     public static FirebaseManager getInstance(){
         if (instance == null)
             instance = new FirebaseManager();
@@ -47,9 +44,11 @@ public class FirebaseManager {
         return instance;
     }
 
+    //update the player information, then call a callback
     public void updateScores(Runnable callback) throws Exception {
         DatabaseReference mRef = mDatabase.getReference().child("leaderboards").child("Users");
         Query byScore = mRef.orderByValue();
+        //makes the callback final so that the inner class can call it
         final Runnable c = callback;
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -57,9 +56,11 @@ public class FirebaseManager {
                 Map<String,Integer> scores = (Map<String,Integer>) dataSnapshot.getValue();
                 scoresMap = new ArrayList<>();
                 for (Map.Entry<String, Integer> entry : scores.entrySet()){
+                    //put the entries one by one into the list (so that they can be ordered easily)
                     insertValue(entry);
                 }
                 try {
+                    //run the callback
                     c.run();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -76,6 +77,7 @@ public class FirebaseManager {
         byScore.addValueEventListener(postListener);
     }
 
+    //update scores without a callback
     public void updateScores() {
         DatabaseReference mRef = mDatabase.getReference().child("leaderboards").child("Users");
         Query byScore = mRef.orderByValue();
@@ -99,10 +101,12 @@ public class FirebaseManager {
         byScore.addValueEventListener(postListener);
     }
 
+    //returned the scores saved
     public ArrayList<Map.Entry<String,Integer>> getScores(){
         return scoresMap;
     }
 
+    //gets the user list from the scores map
     public String[] getUsers(){
         String[] users = new String[scoresMap.size()];
         int i = 0;
@@ -113,6 +117,7 @@ public class FirebaseManager {
         return users;
     }
 
+    //put a new score into the database, if the name is not there yet
     public boolean putNewScore(String name, int score){
         String[] users = this.getUsers();
         for (String s : users){
@@ -124,6 +129,7 @@ public class FirebaseManager {
         return true;
     }
 
+    //put one value into the list, so that it is sorted
     private void insertValue(Map.Entry<String,Integer> e){
         for (int i = 0 ; i < scoresMap.size(); i++){
             int val1 = Integer.parseInt(e.getValue() + "");//TODO review this
@@ -137,6 +143,7 @@ public class FirebaseManager {
         scoresMap.add(e);
     }
 
+    //find the worst player on the leaderboard, then erase it
     private void cleanData(){
         String key = "";
         while (scoresMap.size() > 10){

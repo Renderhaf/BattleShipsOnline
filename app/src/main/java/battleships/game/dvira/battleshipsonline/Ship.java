@@ -12,6 +12,8 @@ public class Ship implements Serializable{
     public Ship(int len){
         locations = new int[len][2];
     }
+
+    //Adds a loction for the ship
     public void addLocation(int x, int y){
         locations[loc][0] = x;
         locations[loc][1] = y;

@@ -39,6 +39,7 @@ public class Game {
         soundEffects = sm.getBoolean("soundEffects", true);
     }
 
+    //switches the turn number between 0 and 1, and gets a turn from the auto player
     public void nextTurn(){
         if (turn == 0) turn = 1;
         else if (turn == 1) {
@@ -50,10 +51,13 @@ public class Game {
         g.turnnumText.setText("Turn : " + turnnum);
     }
 
+    //Main function - acts according to which turn this is
     public boolean getTurn(){
         int[] selected;
-        if (turn == 0) { // Player turn
+        if (turn == 0) { // Human Player turn
             selected = p1.getSelected();
+
+            //tells the player he missed
             if (p2.getBoard().get(selected[0],selected[1]) == Board.SEA){
                 p2.getBoard().set(selected[0],selected[1],Board.MISS);
                 p1.hitSomething(selected[0],selected[1],false);
@@ -62,6 +66,8 @@ public class Game {
                 plopsound();
                 return true;
             }
+
+            //tells the player he hit a ship
             else if (p2.getBoard().get(selected[0],selected[1]) == Board.SHIP){
                 p2.getBoard().set(selected[0],selected[1],Board.HIT);
                 p1.hitSomething(selected[0],selected[1],true);
@@ -77,7 +83,7 @@ public class Game {
                             playerWin();
                         }
                     }
-                    //surround the ship
+                    //surround the ship in missed blocks
                     p2.getBoard().surroundShipWithMissed(p2.getBoard().getShip(selected[0], selected[1]));
                 }
 
@@ -88,6 +94,8 @@ public class Game {
         }
         else { // AutoPlayers Turn
             selected = p2.getSelected();
+
+            //Informs the player that he missed
             if (p1.getBoard().get(selected[0],selected[1]) == Board.SEA){
                 p1.getBoard().set(selected[0],selected[1],Board.MISS);
                 p2.hitSomething(selected[0],selected[1],false);
@@ -96,53 +104,41 @@ public class Game {
                 plopsound();
                 return true;
             }
+            //Informs the player that he hit
             else if (p1.getBoard().get(selected[0],selected[1]) == Board.SHIP){
                 p1.getBoard().set(selected[0],selected[1],Board.HIT);
                 p2.hitSomething(selected[0],selected[1],true);
                 p2.sunkAShip(selected[0], selected[1], isSunk(p1, selected[0],selected[1]));
 
+                //If the player sunk the last ship, inform the human player that he lost
                 if (isSunk(p1, selected[0],selected[1]) && isWin(p1)){
-                    AlertDialog alertDialog = new AlertDialog.Builder(g).create();
-                    alertDialog.setTitle("You Lost!");
-                    alertDialog.setMessage("\nYou have lost the game after " + turnnum + " turns");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    Intent i = new Intent(g.getApplicationContext(), Menu.class);
-                                    g.startActivity(i);
-                                }
-                            });
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CALL MOM", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            g.startActivity(new Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:"+sm.getString("momNumber",""))));
-                        }
-                    });
-                    alertDialog.show();
+                    playerLost();
                 }
                 hitsound();
-//                p1.getBoard().surroundShipWithMissed(p1.getBoard().getShip(selected[0], selected[1]));
                 return true;
             }
             else return false;
         }
     }
 
+    //checks if a ship is sunk
     public boolean isSunk(Player p, int x, int y){
         return p.board.getShip(x,y) != null && p.board.isShipSunk(p.board.getShip(x,y));
     }
 
+    //makes a ship hit sound
     private void hitsound(){
         if (soundEffects)
             hit.start();
     }
 
+    //makes a ship not hit sound
     private void plopsound(){
         if (soundEffects)
             plop.start();
     }
 
+    //checks if a player has won (all of the parameter players / opponents players ships are down)
     private boolean isWin(Player p){
         Ship[] ships = p.getBoard().getShips();
         for (Ship ship : ships){
@@ -152,6 +148,8 @@ public class Game {
         }
         return true;
     }
+
+    //human player has won, show alert dialog
     private void playerWin(){
         AlertDialog alertDialog = new AlertDialog.Builder(g).create();
         alertDialog.setTitle("You Won!");
@@ -179,6 +177,7 @@ public class Game {
         alertDialog.show();
     }
 
+    //Human player has won, but in developer mode
     private void breakDevMode(){
         AlertDialog alertDialog = new AlertDialog.Builder(g).create();
         alertDialog.setTitle("You Won!");
@@ -192,6 +191,28 @@ public class Game {
                         g.startActivity(i);
                     }
                 });
+        alertDialog.show();
+    }
+
+    //human player has lost
+    private void playerLost(){
+        AlertDialog alertDialog = new AlertDialog.Builder(g).create();
+        alertDialog.setTitle("You Lost!");
+        alertDialog.setMessage("\nYou have lost the game after " + turnnum + " turns");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent i = new Intent(g.getApplicationContext(), Menu.class);
+                        g.startActivity(i);
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CALL MOM", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                g.startActivity(new Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:"+sm.getString("momNumber",""))));
+            }
+        });
         alertDialog.show();
     }
 }

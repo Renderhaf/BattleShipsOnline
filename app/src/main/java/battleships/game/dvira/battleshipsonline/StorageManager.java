@@ -16,6 +16,8 @@ public class StorageManager {
         sp = a.getApplicationContext().getSharedPreferences("battleships.game.dvira.PREFRENCE_FILE", Context.MODE_PRIVATE);
         editor = sp.edit();
     }
+
+    //these functions let you get a value from the Shared Preferences
     public int getInt(String name, int defaultv){
         return  sp.getInt(name, defaultv);
     }
@@ -26,6 +28,7 @@ public class StorageManager {
         return  sp.getBoolean(name, defaultv);
     }
 
+    //these functions let you set a value from the Shared Preferences
     public void setInt(String name, int val){
         editor.putInt(name, val);
         editor.commit();

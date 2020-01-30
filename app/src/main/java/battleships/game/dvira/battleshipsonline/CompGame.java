@@ -79,9 +79,9 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
 
         for (int i = 0 ; i < 10; i ++){
             for (int j = 0; j < 10; j++){
-                if (v.getId() == places[i][j].getId() && game.turn == 0 && !playerboard){
+                if (v.getId() == places[i][j].getId() && game.turn == 0 && !playerboard){ //checks whether a human player can put his choice down
+                    //make his choice the block he clicked, and tell the game he clicked
                     int[] ns = {i,j};
-
                     player.setSelected(ns);
                     game.getTurn();
                     drawenemyboard(complayer.board);
@@ -137,6 +137,7 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
+    //switch the boards
     protected void switchBoard(){
         if(playerboard){
             boardname.setText("Opponents Board");
