@@ -93,6 +93,7 @@ public class AutoPlayer extends Player implements Serializable{
         //save that location as a checked location
         picked[tempx][tempy] = 1;
         int[] ns = {tempx, tempy};
+        Log.d("d:  ", ns[0] + " " + ns[1]);
         return ns;
     }
 
@@ -164,7 +165,7 @@ public class AutoPlayer extends Player implements Serializable{
 
     //Uses the ship direction thats already decided and keeps going in that direction unless it hits a wall or an already checked block
     //Returns whether it kept going or not
-    public boolean shipDirInspectCheck(int cc, int rr){
+    public boolean shipDirInspectCheck(int rr, int cc){
         boolean didSomething = false;
         if (shipDir == 0 && rr != 0 && picked[rr-1][cc] == 0){ // Up
             tempx = rr - 1;

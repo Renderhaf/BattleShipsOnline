@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -124,5 +126,25 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
 
             momPhoneTextView.setText(PhoneN);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.dmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.homemenubutton){
+            Intent i = new Intent(this, Menu.class);
+            startActivity(i);
+        } else if (id == R.id.mutemenubutton){
+            if (Splash.music.isPlaying()) Splash.music.pause();
+            else Splash.music.start();
+        }
+        return true;
     }
 }

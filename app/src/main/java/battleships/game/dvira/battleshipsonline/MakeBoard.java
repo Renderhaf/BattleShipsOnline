@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -174,6 +176,26 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
                     places[i][j].setImageResource(R.drawable.black);
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.dmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.homemenubutton){
+            Intent i = new Intent(this, Menu.class);
+            startActivity(i);
+        } else if (id == R.id.mutemenubutton){
+            if (Splash.music.isPlaying()) Splash.music.pause();
+            else Splash.music.start();
+        }
+        return true;
     }
 
 

@@ -8,6 +8,8 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
     Button leaderboardsbtn;
     Button instructionsbtn;
     Button exitbtn;
+    Button playbtn;
 
     IntentFilter batteryChangeIntentFilter;
     Intent batteryStatus;
@@ -59,6 +62,9 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
         exitbtn = (Button) findViewById(R.id.exitbtn);
         exitbtn.setOnClickListener(this);
 
+        playbtn = (Button) findViewById(R.id.playbutton);
+        playbtn.setOnClickListener(this);
+
         batteryChangeIntentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         batteryStatus = getApplicationContext().registerReceiver(null, batteryChangeIntentFilter);
 
@@ -88,6 +94,10 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
             finish();
             System.exit(0);
         }
+        else if (v.getId() == playbtn.getId()){
+            Intent i = new Intent(Menu.this, MakeBoard.class);
+            startActivity(i);
+        }
     }
 
     private int getBatteryPrecent(){
@@ -96,5 +106,25 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
 
         float batteryPct = level * 100 / (float)scale;
         return (int) batteryPct;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.dmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.homemenubutton){
+            Intent i = new Intent(this, Menu.class);
+            startActivity(i);
+        } else if (id == R.id.mutemenubutton){
+            if (Splash.music.isPlaying()) Splash.music.pause();
+            else Splash.music.start();
+        }
+        return true;
     }
 }
