@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BattleShips Online</string>
+    <string name="app_name">BattleShips</string>
     <string name="instructionsBody">
         To start a game, go to the main menu and scroll down.\n
         When you enter a game, decide the ship location by clicking on the board, then rotate it by clicking on the same location again.\n
