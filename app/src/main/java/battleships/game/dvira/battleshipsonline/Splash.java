@@ -1,6 +1,7 @@
 package battleships.game.dvira.battleshipsonline;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
@@ -14,12 +15,15 @@ import android.widget.ImageView;
 public class Splash extends AppCompatActivity {
 
     private ImageView imageView;
-    public static MediaPlayer music;
+    public static Intent MusicIntent;
+    public static Context context;
     StorageManager sm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         sm = new StorageManager(this);
+        MusicIntent = new Intent(this,  MusicService.class);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_splash);
@@ -29,9 +33,8 @@ public class Splash extends AppCompatActivity {
             public void run(){
                 try{
                     synchronized (this){
-                        music = MediaPlayer.create(Splash.this, R.raw.soundtrack);
                         if (sm.getBoolean("soundMusic",true)) {
-                            music.start();
+                            startService(MusicIntent);
                         }
                         Animation fade = AnimationUtils.loadAnimation(Splash.this, R.anim.tween);
                         imageView.startAnimation(fade);

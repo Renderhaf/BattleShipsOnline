@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Checkable;
 import android.widget.EditText;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,9 +79,9 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
             }
 
             if (!musicCheckBox.isChecked() && sm.getBoolean("soundMusic", true)){
-                Splash.music.stop();
+                stopService(Splash.MusicIntent);
             } else if (musicCheckBox.isChecked() && !sm.getBoolean("soundMusic", true)){
-                Splash.music.start();
+                startService(Splash.MusicIntent);
             }
 
             sm.setInt("shipnum", shipnum);
@@ -142,8 +143,8 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
             Intent i = new Intent(this, Menu.class);
             startActivity(i);
         } else if (id == R.id.mutemenubutton){
-            if (Splash.music.isPlaying()) Splash.music.pause();
-            else Splash.music.start();
+            if (MusicService.isPlaying) stopService(Splash.MusicIntent);
+            else startService(Splash.MusicIntent);
         }
         return true;
     }

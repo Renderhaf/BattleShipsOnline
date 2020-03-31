@@ -192,8 +192,8 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
             Intent i = new Intent(this, Menu.class);
             startActivity(i);
         } else if (id == R.id.mutemenubutton){
-            if (Splash.music.isPlaying()) Splash.music.pause();
-            else Splash.music.start();
+            if (MusicService.isPlaying) stopService(Splash.MusicIntent);
+            else startService(Splash.MusicIntent);
         }
         return true;
     }
