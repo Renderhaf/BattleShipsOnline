@@ -81,14 +81,17 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
         if (v.getId() == settingsButton.getId()){
             Intent i = new Intent(Menu.this, Settings.class);
             startActivity(i);
+            finish();
         }
         else if (v.getId() == leaderboardsbtn.getId()){
             Intent i = new Intent(Menu.this, Leaderboards.class);
             startActivity(i);
+            finish();
         }
         else if (v.getId() == instructionsbtn.getId()){
             Intent i = new Intent(Menu.this, Instructions.class);
             startActivity(i);
+            finish();
         }
         else if (v.getId() == exitbtn.getId()){
             finish();
@@ -97,6 +100,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
         else if (v.getId() == playbtn.getId()){
             Intent i = new Intent(Menu.this, MakeBoard.class);
             startActivity(i);
+            finish();
         }
     }
 

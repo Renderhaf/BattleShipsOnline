@@ -51,6 +51,7 @@ public class Leaderboards extends AppCompatActivity  implements View.OnClickList
         if (v.getId() == backbutton.getId()){
             Intent i = new Intent(this, Menu.class);
             startActivity(i);
+            finish();
         }
     }
 

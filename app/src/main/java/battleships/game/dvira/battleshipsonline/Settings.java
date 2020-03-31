@@ -94,6 +94,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
 
             Intent i = new Intent(this, Menu.class);
             startActivity(i);
+            finish();
         }
 
         else if (v.getId() == resetHighScore.getId()){
@@ -104,11 +105,13 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
         else if (v.getId() == momPhoneButton.getId()){
             Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
             startActivityForResult(i, 1);
+            finish();
         }
 
         else if (v.getId() == backbutton.getId()){
             Intent i = new Intent(this, Menu.class);
             startActivity(i);
+            finish();
         }
     }
 
@@ -142,6 +145,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
         if (id == R.id.homemenubutton){
             Intent i = new Intent(this, Menu.class);
             startActivity(i);
+            finish();
         } else if (id == R.id.mutemenubutton){
             if (MusicService.isPlaying) stopService(Splash.MusicIntent);
             else startService(Splash.MusicIntent);

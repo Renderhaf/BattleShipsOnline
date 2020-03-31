@@ -49,5 +49,5 @@ public class Splash extends AppCompatActivity {
 
         };
         mSlashScreen.start();
-    };
+    }
 }

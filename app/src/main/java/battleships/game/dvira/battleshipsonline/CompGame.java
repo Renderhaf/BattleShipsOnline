@@ -73,6 +73,7 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
         if (v.getId() == homebutton.getId()){
             Intent i = new Intent(CompGame.this, battleships.game.dvira.battleshipsonline.Menu.class);
             startActivity(i);
+            finish();
         }
 
         if (v.getId() == switchbutton.getId()){
@@ -164,6 +165,7 @@ public class CompGame extends AppCompatActivity implements View.OnClickListener{
         if (id == R.id.homemenubutton){
             Intent i = new Intent(this, Menu.class);
             startActivity(i);
+            finish();
         } else if (id == R.id.mutemenubutton){
             if (MusicService.isPlaying) stopService(Splash.MusicIntent);
             else startService(Splash.MusicIntent);

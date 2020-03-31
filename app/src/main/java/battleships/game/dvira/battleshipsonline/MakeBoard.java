@@ -108,6 +108,7 @@ public class MakeBoard extends AppCompatActivity implements View.OnClickListener
                                 i.putExtra("player", p);
                                 i.putExtra("shipnum", shipnum);
                                 startActivity(i);
+                                finish();
                             }
                         });
                 alertDialog.show();

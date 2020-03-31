@@ -83,6 +83,7 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
                     finish();
                     Intent i = new Intent(NewHS.this, Menu.class);
                     startActivity(i);
+                    finish();
 
                 }
             };
@@ -93,6 +94,7 @@ public class NewHS extends AppCompatActivity implements View.OnClickListener{
         else if (v.getId() == backbutton.getId()){
             Intent i = new Intent(this, Menu.class);
             startActivity(i);
+            finish();
         }
     }
 

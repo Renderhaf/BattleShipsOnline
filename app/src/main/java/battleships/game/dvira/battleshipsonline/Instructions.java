@@ -30,6 +30,7 @@ public class Instructions extends AppCompatActivity implements View.OnClickListe
         if (view.getId() == backButton.getId()){
             Intent i = new Intent(Instructions.this, Menu.class);
             startActivity(i);
+            finish();
         }
     }
 }
