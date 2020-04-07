@@ -3,6 +3,7 @@ package battleships.game.dvira.battleshipsonline;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
@@ -38,7 +39,7 @@ public class Splash extends AppCompatActivity {
                         }
                         Animation fade = AnimationUtils.loadAnimation(Splash.this, R.anim.tween);
                         imageView.startAnimation(fade);
-                        wait(2000); //10000
+                        wait(3000); //10000
                     }}
                 catch(InterruptedException e){}
                 finish();

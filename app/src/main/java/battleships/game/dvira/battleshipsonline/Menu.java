@@ -25,9 +25,6 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
     Button exitbtn;
     Button playbtn;
 
-    IntentFilter batteryChangeIntentFilter;
-    Intent batteryStatus;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,17 +63,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
         playbtn = (Button) findViewById(R.id.playbutton);
         playbtn.setOnClickListener(this);
 
-        batteryChangeIntentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        batteryStatus = getApplicationContext().registerReceiver(null, batteryChangeIntentFilter);
-
-
-        if (getBatteryPrecent() < 90){
-            Toast.makeText(this, "Your battery is under 90%, since it is at" + getBatteryPrecent() + " %", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Your battery is above 90%, since it is at " + getBatteryPrecent() + " %", Toast.LENGTH_SHORT).show();
-        }
-
-
+        registerReceiver(new BatteryBroadcastReciever(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
     public void onClick(View v){
         if (v.getId() == settingsButton.getId()){
@@ -103,14 +90,6 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
             startActivity(i);
             finish();
         }
-    }
-
-    private int getBatteryPrecent(){
-        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-
-        float batteryPct = level * 100 / (float)scale;
-        return (int) batteryPct;
     }
 
     @Override

@@ -27,6 +27,8 @@
         <activity android:name=".Leaderboards" />
         <activity android:name=".Instructions"></activity>
         <service android:name=".MusicService"></service>
+        <receiver android:name = ".BatteryBroadcastReciever" android:enabled = "true" android:exported = "true">
+        </receiver>
     </application>
 
 </manifest>
