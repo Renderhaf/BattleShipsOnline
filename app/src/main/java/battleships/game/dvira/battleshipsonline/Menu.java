@@ -1,5 +1,6 @@
 package battleships.game.dvira.battleshipsonline;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -24,6 +25,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
     Button instructionsbtn;
     Button exitbtn;
     Button playbtn;
+    public final BroadcastReceiver batteryBroadCast = new BatteryBroadcastReciever();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +65,20 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
         playbtn = (Button) findViewById(R.id.playbutton);
         playbtn.setOnClickListener(this);
 
-        registerReceiver(new BatteryBroadcastReciever(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
+
+    @Override
+    protected void onResume() {
+        registerReceiver(batteryBroadCast, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(batteryBroadCast);
+        super.onPause();
+    }
+
     public void onClick(View v){
         if (v.getId() == settingsButton.getId()){
             Intent i = new Intent(Menu.this, Settings.class);

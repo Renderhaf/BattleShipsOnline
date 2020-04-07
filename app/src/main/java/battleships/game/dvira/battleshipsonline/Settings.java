@@ -105,7 +105,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
         else if (v.getId() == momPhoneButton.getId()){
             Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
             startActivityForResult(i, 1);
-            finish();
         }
 
         else if (v.getId() == backbutton.getId()){
