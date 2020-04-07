@@ -34,6 +34,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener{
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_menu);
         lay = (ConstraintLayout) findViewById(R.id.clayout);
+
         lay.setOnTouchListener(new OnSwipeTouchListener(Menu.this){
             public void onSwipeRight() {
             }

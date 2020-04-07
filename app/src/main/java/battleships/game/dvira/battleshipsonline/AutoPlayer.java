@@ -1,7 +1,5 @@
 package battleships.game.dvira.battleshipsonline;
 
-import android.util.Log;
-
 import java.io.Serializable;
 
 /**
@@ -13,16 +11,16 @@ public class AutoPlayer extends Player implements Serializable{
     int w, h;
     int[][] picked;
 
-    int tempx = 0;
-    int tempy = 0;
+    private int tempx = 0;
+    private int tempy = 0;
 
-    int hitx = 0;
-    int hity = 0;
-    int shipDir = -1;
-    boolean shipInspect = false;
+    private int hitx = 0;
+    private int hity = 0;
+    private int shipDir = -1;
+    private boolean shipInspect = false;
 
-    int startx = 0;
-    int starty = 0;
+    private int startx = 0;
+    private int starty = 0;
 
     public AutoPlayer(int w, int h, int shipnum){
         super(new Board());
@@ -43,8 +41,8 @@ public class AutoPlayer extends Player implements Serializable{
         int[] selected = new int[2];
         for (int i = 0; i < amount; i++){
             while (true){
-                rx = getRandomLocation();
-                ry = getRandomLocation();
+                rx = getRandomExistingLocation();
+                ry = getRandomExistingLocation();
                 selected[0] = rx;
                 selected[1] = ry;
                 rd = (int) (4 * Math.random());
@@ -58,7 +56,7 @@ public class AutoPlayer extends Player implements Serializable{
     }
 
     //This function supplies a random location on the board
-    private int getRandomLocation(){
+    private int getRandomExistingLocation(){
         return (int) (10 * Math.random());
     }
 
@@ -67,33 +65,30 @@ public class AutoPlayer extends Player implements Serializable{
     public int[] getSelected(){
         boolean didSomething = false;
 
-        if (shipInspect){ //Whether it is currently in the procces of destroying a ship
+        if (shipInspect){ //Whether it is currently in the process of destroying a ship
             if (shipDir != -1){ //If it already has a direction
                 //keep going in that direction
-                didSomething = shipDirInspectCheck(hitx, hity);
+                didSomething = shipInspect(hitx, hity);
                 //If it ended that direction, then find a new direction from the starting point
                 if (!didSomething){
-                    didSomething = shipInspectCheck(startx, starty);
+                    didSomething = initShipInspect(startx, starty);
                 }
-            } else{ //If it doesnt have a direction already, find one
-                didSomething = shipInspectCheck(hitx,hity);
+            } else{ //If it doesn't have a direction already, find one
+                didSomething = initShipInspect(hitx,hity);
             }
 
             //If there is nothing to do, start from a new random direction - the code should not enter the statment
             if (!didSomething){
-                shipInspect = false;
-                randomNum();
-                shipDir = -1;
+                getClearRandomLocation();
             }
         }
         else { // if you are not looking at a ship, start looking for a new one
-            randomNum();
+            getClearRandomLocation();
         }
 
         //save that location as a checked location
         picked[tempx][tempy] = 1;
         int[] ns = {tempx, tempy};
-        Log.d("d:  ", ns[0] + " " + ns[1]);
         return ns;
     }
 
@@ -121,70 +116,72 @@ public class AutoPlayer extends Player implements Serializable{
     }
 
     //This function puts random index in tempx and tempy that are not checked yet
-    public void randomNum(){
+    public void getClearRandomLocation(){
         boolean end = false;
         while (!end){
-            tempx = ((int) (Math.random()*10));;
-            tempy = ((int) (Math.random()*10));
+            tempx = getRandomExistingLocation();
+            tempy = getRandomExistingLocation();
 
             if (picked[tempx][tempy] == 0){
                 end = true;
             }
         }
+        shipDir = -1;
+        shipInspect = false;
     }
 
     //This function finds an initial direction for a ship inspection
-    public boolean shipInspectCheck(int rr, int cc){
+    public boolean initShipInspect(int x, int y){
         boolean didSomething = false;
-        if (rr != 0 && picked[rr-1][cc] == 0){ // Up
-            tempx = rr - 1;
-            tempy = cc;
+        if (x != 0 && picked[x-1][y] == 0){ // Up
+            tempx = x - 1;
+            tempy = y;
             didSomething = true;
             shipDir = 0;
         }
-        else if (cc != h-1 && picked[rr][cc+1] == 0){ // Right
-            tempx = rr;
-            tempy = cc + 1;
+        else if (y != h-1 && picked[x][y+1] == 0){ // Right
+            tempx = x;
+            tempy = y + 1;
             didSomething = true;
             shipDir = 1;
         }
-        else if (rr != w-1 && picked[rr+1][cc] == 0){ // Down
-            tempx = rr + 1;
-            tempy = cc;
+        else if (x != w-1 && picked[x+1][y] == 0){ // Down
+            tempx = x + 1;
+            tempy = y;
             didSomething = true;
             shipDir = 2;
         }
-        else if (cc != 0 && picked[rr][cc-1] == 0){ // Left
-            tempx = rr;
-            tempy = cc - 1;
+        else if (y != 0 && picked[x][y-1] == 0){ // Left
+            tempx = x;
+            tempy = y - 1;
             didSomething = true;
             shipDir = 3;
         }
         return didSomething;
     }
 
-    //Uses the ship direction thats already decided and keeps going in that direction unless it hits a wall or an already checked block
+    //Uses the ship direction that's already decided and keeps going in that direction unless it hits a wall or an already checked block
     //Returns whether it kept going or not
-    public boolean shipDirInspectCheck(int rr, int cc){
+    public boolean shipInspect(int x, int y){
         boolean didSomething = false;
-        if (shipDir == 0 && rr != 0 && picked[rr-1][cc] == 0){ // Up
-            tempx = rr - 1;
-            tempy = cc;
+        if (shipDir == 0 && x != 0 && picked[x-1][y] == 0){ // Up
+            tempx = x - 1;
+            tempy = y;
             didSomething = true;
         }
-        else if (shipDir == 1 && cc != h-1 && picked[rr][cc+1] == 0){ // Right
-            tempx = rr;
-            tempy = cc + 1;
+        else if (shipDir == 1 && y != h-1 && picked[x][y+1] == 0){ // Right
+            tempx = x;
+            tempy = y + 1;
             didSomething = true;
         }
-        else if (shipDir == 2 && rr != w-1 && picked[rr+1][cc] == 0){ // Down
+        else if (shipDir == 2 && x != w-1 && picked[x+1][y] == 0){ // Down
             tempx = hitx + 1;
             tempy = hity;
             didSomething = true;
         }
-        else if (shipDir == 3 && cc != 0 && picked[rr][cc-1] == 0){ // Left
-            tempx = rr;
-            tempy = cc - 1;
+        else if (shipDir == 3 && y != 0 && picked[x][y-1] == 0){ // Left
+            tempx = x;
+            tempy = y - 1;
             didSomething = true;
         }
         return didSomething;
