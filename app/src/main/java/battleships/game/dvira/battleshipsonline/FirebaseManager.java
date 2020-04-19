@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-/**
+/***
  * Created by dvira on 27-Sep-19.
  */
 
@@ -36,7 +36,9 @@ public class FirebaseManager {
 
     }
 
-    //since the manager is a singleton, you can get its static instance from this function
+    /**
+    since the manager is a singleton, you can get its static instance from this function
+     */
     public static FirebaseManager getInstance(){
         if (instance == null)
             instance = new FirebaseManager();
@@ -44,7 +46,9 @@ public class FirebaseManager {
         return instance;
     }
 
-    //update the player information, then call a callback
+    /**
+    update the player information, then call a callback
+     */
     public void updateScores(Runnable callback) throws Exception {
         DatabaseReference mRef = mDatabase.getReference().child("leaderboards").child("Users");
         Query byScore = mRef.orderByValue();
@@ -77,7 +81,9 @@ public class FirebaseManager {
         byScore.addValueEventListener(postListener);
     }
 
-    //update scores without a callback
+    /**
+    update scores without a callback
+     */
     public void updateScores() {
         DatabaseReference mRef = mDatabase.getReference().child("leaderboards").child("Users");
         Query byScore = mRef.orderByValue();
@@ -101,12 +107,16 @@ public class FirebaseManager {
         byScore.addValueEventListener(postListener);
     }
 
-    //returned the scores saved
+    /**
+    returned the scores saved
+     */
     public ArrayList<Map.Entry<String,Integer>> getScores(){
         return scoresMap;
     }
 
-    //gets the user list from the scores map
+    /**
+    gets the user list from the scores map
+     */
     public String[] getUsers(){
         String[] users = new String[scoresMap.size()];
         int i = 0;
@@ -117,7 +127,9 @@ public class FirebaseManager {
         return users;
     }
 
-    //put a new score into the database, if the name is not there yet
+    /**
+    put a new score into the database, if the name is not there yet
+     */
     public boolean putNewScore(String name, int score){
         String[] users = this.getUsers();
         for (String s : users){
@@ -129,7 +141,9 @@ public class FirebaseManager {
         return true;
     }
 
-    //put one value into the list, so that it is sorted
+    /**
+    put one value into the list, so that it is sorted
+     */
     private void insertValue(Map.Entry<String,Integer> e){
         for (int i = 0 ; i < scoresMap.size(); i++){
             int val1 = Integer.parseInt(e.getValue() + "");//TODO review this
@@ -143,7 +157,9 @@ public class FirebaseManager {
         scoresMap.add(e);
     }
 
-    //find the worst player on the leaderboard, then erase it
+    /**
+    find the worst player on the leaderboard, then erase it
+     */
     private void cleanData(){
         String key = "";
         while (scoresMap.size() > 10){

@@ -2,7 +2,7 @@ package battleships.game.dvira.battleshipsonline;
 
 import java.io.Serializable;
 
-/**
+/***
  * Created by dvira on 08-Aug-19.
  */
 
@@ -29,8 +29,9 @@ public class AutoPlayer extends Player implements Serializable{
         this.h = h;
         picked = new int[w][h];
     }
-
-    //This function creates a new Random board that complies with the game rules
+    /**
+    This function creates a new Random board that complies with the game rules
+    */
     private Board buildBoard(int shipnum){
         int amount = shipnum;
         if (amount > 5) amount = 5;
@@ -55,12 +56,16 @@ public class AutoPlayer extends Player implements Serializable{
         return b;
     }
 
-    //This function supplies a random location on the board
+    /**
+    This function supplies a random location on the board
+     */
     private int getRandomExistingLocation(){
         return (int) (10 * Math.random());
     }
 
-    //The Game uses this function to receive the position that the player has selected (This is overridden from the Player class).
+    /**
+    The Game uses this function to receive the position that the player has selected (This is overridden from the Player class).
+     */
     @Override
     public int[] getSelected(){
         boolean didSomething = false;
@@ -92,7 +97,9 @@ public class AutoPlayer extends Player implements Serializable{
         return ns;
     }
 
-    //This function is called when the player hits a ship
+    /**
+    This function is called when the player hits a ship
+     */
     @Override
     public void hitSomething(int x, int y, boolean h){
         if (h){
@@ -115,7 +122,9 @@ public class AutoPlayer extends Player implements Serializable{
         }
     }
 
-    //This function puts random index in tempx and tempy that are not checked yet
+    /**
+    This function puts random index in tempx and tempy that are not checked yet
+     */
     public void getClearRandomLocation(){
         boolean end = false;
         while (!end){
@@ -130,7 +139,9 @@ public class AutoPlayer extends Player implements Serializable{
         shipInspect = false;
     }
 
-    //This function finds an initial direction for a ship inspection
+    /**
+    This function finds an initial direction for a ship inspection
+     */
     public boolean initShipInspect(int x, int y){
         boolean didSomething = false;
         if (x != 0 && picked[x-1][y] == 0){ // Up
@@ -160,8 +171,9 @@ public class AutoPlayer extends Player implements Serializable{
         return didSomething;
     }
 
-    //Uses the ship direction that's already decided and keeps going in that direction unless it hits a wall or an already checked block
-    //Returns whether it kept going or not
+    /**Uses the ship direction that's already decided and keeps going in that direction unless it hits a wall or an already checked block
+    Returns whether it kept going or not
+    */
     public boolean shipInspect(int x, int y){
         boolean didSomething = false;
         if (shipDir == 0 && x != 0 && picked[x-1][y] == 0){ // Up

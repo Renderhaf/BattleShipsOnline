@@ -5,7 +5,7 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
+/***
  * Created by dvira on 07-Aug-19.
  */
 
@@ -23,17 +23,23 @@ public class Board implements Serializable{
         ships = new Ship[0];
     }
 
-    //set a block on the board
+    /**
+    set a block on the board
+     */
     public void set(int x, int y, int val){
         board[x][y] = val;
     }
 
-    //get a block on the board
+    /**
+    get a block on the board
+     */
     public int get(int x, int y){
         return board[x][y];
     }
 
-    //reset the board
+    /**
+    reset the board
+     */
     public void reset(){
         for (int i = 0;i < 10;i++){
             for (int j = 0; j < 10; j++){
@@ -42,7 +48,9 @@ public class Board implements Serializable{
         }
     }
 
-    //lay a ship on the board
+    /**
+    lay a ship on the board
+     */
     public void addShip(Ship s){
         Ship[] newships = new Ship[ships.length+1];
         for (int i = 0 ; i < ships.length; i++){
@@ -52,12 +60,16 @@ public class Board implements Serializable{
         ships = newships;
     }
 
-    //returns the ships
+    /**
+    returns the ships
+     */
     public Ship[] getShips(){
         return ships;
     }
 
-    //creates a string represntation of the board
+    /**
+    creates a string representation of the board
+     */
     public String toString(){
         String str = "";
         for (int i = 0; i < ships.length; i++){
@@ -66,7 +78,9 @@ public class Board implements Serializable{
         return str;
     }
 
-    //get a ship from its coordinets
+    /**
+    get a ship from its coordinates
+     */
     public Ship getShip(int x, int y){
         for (int i = 0;i < ships.length; i++){
             for (int j = 0; j < ships[i].locations.length; j++){
@@ -78,7 +92,9 @@ public class Board implements Serializable{
         return null;
     }
 
-    //get whether a ship is sunk or not
+    /**
+    get whether a ship is sunk or not
+     */
     public boolean isShipSunk(Ship s){
         for (int i = 0; i < s.locations.length; i++){
             if (board[s.locations[i][0]][s.locations[i][1]] == Board.SHIP) return false;
@@ -86,7 +102,9 @@ public class Board implements Serializable{
         return true;
     }
 
-    // returnes whether a ship can be put down based on its details (direction, starting point, length)
+    /**
+    returnes whether a ship can be put down based on its details (direction, starting point, length)
+     */
     public boolean checkShipDir(int dir, int[] selected, int len){ // returns a boolean which states if you can lay a ship
         int x,y;
         int xmul, ymul;
@@ -138,12 +156,16 @@ public class Board implements Serializable{
         return true;
     }
 
-    //checks whether a coordinet is on the board
+    /**
+    checks whether a coordinate is on the board
+     */
     private boolean inRange(int x, int y){
         return !(x>=board.length || x<0 || y>=board[0].length || y<0);
     }
 
-    //checks whether a coordinet is on the board and is not next to a ship (or on one)
+    /**
+    checks whether a coordinate is on the board and is not next to a ship (or on one)
+     */
     private boolean checkIfBlockIsGood(int x, int y){
 
         for (int i = -1; i <= 1; i++){
@@ -155,7 +177,9 @@ public class Board implements Serializable{
         return true;
     }
 
-    //puts checked blocks all around a ship (used for the player after sinking a ship)
+    /**
+    puts checked blocks all around a ship (used for the player after sinking a ship)
+     */
     public void surroundShipWithMissed(Ship s){
         int[][] locs = s.locations;
         for (int[] loc : locs){
@@ -169,7 +193,9 @@ public class Board implements Serializable{
         }
     }
 
-    //adds a new ship from its details (direction, length, starting point)
+    /**
+    adds a new ship from its details (direction, length, starting point)
+     */
     public void addNewShipFromVals(int len, int dir, int[] selected){
         Ship s = new Ship(len);
         switch (dir){

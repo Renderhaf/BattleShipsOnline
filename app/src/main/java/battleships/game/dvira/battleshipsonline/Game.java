@@ -9,7 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
-/**
+/***
  * Created by dvira on 08-Aug-19.
  */
 
@@ -39,7 +39,9 @@ public class Game {
         soundEffects = sm.getBoolean("soundEffects", true);
     }
 
-    //switches the turn number between 0 and 1, and gets a turn from the auto player
+    /**
+    switches the turn number between 0 and 1, and gets a turn from the auto player
+     */
     public void nextTurn(){
         if (turn == 0) turn = 1;
         else if (turn == 1) {
@@ -51,7 +53,9 @@ public class Game {
         g.turnnumText.setText("Turn : " + turnnum);
     }
 
-    //Main function - acts according to which turn this is
+    /**
+    Main function - acts according to which turn this is
+     */
     public boolean getTurn(){
         int[] selected;
         if (turn == 0) { // Human Player turn
@@ -121,24 +125,32 @@ public class Game {
         }
     }
 
-    //checks if a ship is sunk
+    /**
+    checks if a ship is sunk
+     */
     public boolean isSunk(Player p, int x, int y){
         return p.board.getShip(x,y) != null && p.board.isShipSunk(p.board.getShip(x,y));
     }
 
-    //makes a ship hit sound
+    /**
+    makes a ship hit sound
+     */
     private void hitsound(){
         if (soundEffects)
             hit.start();
     }
 
-    //makes a ship not hit sound
+    /**
+    makes a ship not hit sound
+     */
     private void plopsound(){
         if (soundEffects)
             plop.start();
     }
 
-    //checks if a player has won (all of the parameter players / opponents players ships are down)
+    /**
+    checks if a player has won (all of the parameter players / opponents players ships are down)
+     */
     private boolean isWin(Player p){
         Ship[] ships = p.getBoard().getShips();
         for (Ship ship : ships){
@@ -149,7 +161,9 @@ public class Game {
         return true;
     }
 
-    //human player has won, show alert dialog
+    /**
+    human player has won, show alert dialog
+     */
     private void playerWin(){
         AlertDialog alertDialog = new AlertDialog.Builder(g).create();
         alertDialog.setTitle("You Won!");
@@ -177,7 +191,9 @@ public class Game {
         alertDialog.show();
     }
 
-    //Human player has won, but in developer mode
+    /**
+    Human player has won, but in developer mode
+     */
     private void breakDevMode(){
         AlertDialog alertDialog = new AlertDialog.Builder(g).create();
         alertDialog.setTitle("You Won!");
@@ -194,7 +210,9 @@ public class Game {
         alertDialog.show();
     }
 
-    //human player has lost
+    /**
+    human player has lost
+     */
     private void playerLost(){
         AlertDialog alertDialog = new AlertDialog.Builder(g).create();
         alertDialog.setTitle("You Lost!");
